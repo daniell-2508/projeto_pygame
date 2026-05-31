@@ -19,6 +19,7 @@ Liste os integrantes do grupo.
 - Nome 1: Pedro Henrique da Silva Fonseca
 - Nome 2: Guilherme Ferreira Valadares
 - Nome 3: Daniell Oliveira Cardoso
+- Nome 4: Vinicius Eduardo de Souza Matos Silva
 
 ## 3. Tipo de jogo
 
