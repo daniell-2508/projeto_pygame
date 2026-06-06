@@ -1,27 +1,25 @@
-def calcular_pontos(pontos_atual, pontos_ganhos):
-    """Soma os pontos ganhos à pontuação atual."""
-    return pontos_atual + pontos_ganhos
+import pygame
 
+def mover_bola(bola, vel_x, vel_y):
+    bola.x += vel_x
+    bola.y += vel_y
+    return bola
 
-def tomar_dano(vida_atual, dano):
-    """Reduz a vida atual com base no dano recebido."""
-    return vida_atual - dano
+def verificar_paredes(bola, vel_x, vel_y, largura, altura):
+    if bola.top <= 0 or bola.bottom >= altura:
+        vel_y *= -1
+    if bola.left <= 0 or bola.right >= largura:
+        vel_x *= -1
+    return vel_x, vel_y
 
+def verificar_colisao_raquete(bola, vel_x, raquete_esq, raquete_dir):
+    if bola.colliderect(raquete_esq) or bola.colliderect(raquete_dir):
+        vel_x *= -1
+    return vel_x
 
-def jogador_perdeu(vidas):
-    """Indica se o jogador ficou sem vidas."""
-    return vidas <= 0
-
-
-def limitar_valor(valor, minimo, maximo):
-    """Mantém um valor dentro do intervalo [minimo, maximo]."""
-    if valor < minimo:
-        return minimo
-    if valor > maximo:
-        return maximo
-    return valor
-
-
-def verificar_colisao(retangulo_1, retangulo_2):
-    """Verifica sobreposição entre dois retângulos do Pygame."""
-    return retangulo_1.colliderect(retangulo_2)
+def mover_raquete(raquete, direcao, velocidade, altura):
+    raquete.y += direcao * velocidade
+    if raquete.top < 0:
+        raquete.top = 0
+    if raquete.bottom > altura:
+        raquete.bottom = altura

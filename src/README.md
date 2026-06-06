@@ -13,3 +13,6 @@ Esta pasta contém os módulos principais do jogo.
 ## Dica de evolução
 
 Quando o projeto crescer, mantenha módulos pequenos e separados por responsabilidade.
+
+### Referências
+- Curso de Pygame — João Tinti (YouTube)

@@ -8,24 +8,23 @@ A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolv
 
 Escreva aqui o nome provisório do jogo.
 
-Exemplo:
 
-> Corrida dos Obstáculos
+> Py pong
 
 ## 2. Integrantes do grupo
 
 Liste os integrantes do grupo.
 
-- Nome 1:
-- Nome 2:
-- Nome 3:
+- Nome 1: Pedro Henrique da Silva Fonseca
+- Nome 2: Daniell Oliveira Cardoso de Sá
+- Nome 3: Guilherme Ferreira Valadares
 - Nome 4:
 
 ## 3. Tipo de jogo
 
 Indique o tipo de jogo que será desenvolvido.
 
-Exemplos:
+Exemplos: 
 
 - jogo de desviar de obstáculos;
 - jogo de coleta de itens;
@@ -40,9 +39,9 @@ Exemplos:
 - jogo de clique rápido;
 - jogo de sobrevivência simples.
 
-Tipo escolhido pelo grupo:
+Tipo escolhido pelo grupo: 
 
-> Escreva aqui.
+> Pong
 
 ## 4. Descrição geral do jogo
 
@@ -57,7 +56,17 @@ Procure responder:
 
 Descrição:
 
-> Escreva aqui.
+> O que aparece na tela: 
+Raquete do jogador 1 e raquete do jogador 2, a mesa e a bola
+> O que o jogador controla:
+O jogador controla a raquete
+> O que o jogador precisa fazer: 
+Acertar a bola e fazer com que o adversário não pegue-a, removendo uma vida do adversário
+> Quais desafios aparecem durante a partida:
+A partir de uma pontuação determinada, a bola vai ficando mais rápida e difícil de ser acertada. 
+
+
+
 
 ## 5. Objetivo do jogador
 
@@ -75,7 +84,7 @@ Exemplos:
 
 Objetivo:
 
-> Escreva aqui.
+> Ganhar o jogo com o maior número de vidas possível.
 
 ## 6. Regras principais
 
@@ -91,10 +100,10 @@ Exemplo:
 
 Regras do grupo:
 
-- Regra 1:
-- Regra 2:
-- Regra 3:
-- Regra 4:
+- Regra 1: Cada jogador terá 5 vidas.
+- Regra 2: 
+- Regra 3: 
+- Regra 4: 
 - Regra 5:
 
 ## 7. Condição de vitória
