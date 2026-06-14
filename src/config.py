@@ -1,6 +1,6 @@
 # Configurações centrais do jogo (tela, cores e caminhos de arquivos).
-LARGURA_TELA = 640
-ALTURA_TELA = 480
+LARGURA_TELA = 1280
+ALTURA_TELA = 720
 FPS = 60
 
 TITULO_JOGO = "PyPong"
@@ -8,6 +8,10 @@ TITULO_JOGO = "PyPong"
 BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
 CINZA = (212,212,212)
+AMARELO = (255, 255, 0)
+AZUL = (0,0,255)
+VERDE = (0,255,0)
+
 
 VELOCIDADE_RAQUETE = 5
 VELOCIDADE_BOLA = 3
