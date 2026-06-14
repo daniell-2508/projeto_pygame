@@ -7,6 +7,8 @@ import os
 AMARELO = (255, 255, 0)
 AZUL = (0,0,255)
 VERDE = (0,255,0)
+CINZA_CLARO = (190, 190, 190)
+VERMELHO = (255, 0 ,0)
 
 
 pygame.init()
@@ -20,11 +22,19 @@ fonte_pequena = pygame.font.Font(CAMINHO_FONTE, 28)
 
 tela = pygame.display.set_mode((LARGURA,ALTURA))
 pygame.display.set_caption(TITULO)
+CAMINHO_CENARIO = os.path.join(PASTA_ATUAL, "..", "assets", "imagens", "cenario.png")
+
+fundo = pygame.image.load(CAMINHO_CENARIO).convert()
+fundo = pygame.transform.scale(fundo, (LARGURA, ALTURA))
+
+
 tempo_estado = pygame.time.get_ticks()
 
-raquete_esq = pygame.Rect(10, ALTURA//2 - 40, 10, 80)
-raquete_dir = pygame.Rect(LARGURA - 20, ALTURA//2 - 40, 10, 80)
-bola = pygame.Rect(LARGURA//2 - 8, ALTURA//2 - 8, 16, 16)
+mesa = pygame.Rect(48, 192, 672, 384)
+
+raquete_esq = pygame.Rect(mesa.left, mesa.centery - 40, 10, 80)
+raquete_dir = pygame.Rect(mesa.right - 10, mesa.centery - 40, 10, 80)
+bola = pygame.Rect(mesa.centerx - 8, mesa.centery - 8, 16, 16)
 vel_bola_x = VELOCIDADE_BOLA
 vel_bola_y = VELOCIDADE_BOLA
 relogio = pygame.time.Clock()
@@ -32,7 +42,6 @@ opcao_pause = 0
 
 vidas_esq = 3
 vidas_dir = 3
-
 
 
 def desenhar_texto(texto, cor, x, y, fonte_usada=None):
@@ -132,8 +141,8 @@ while True:
         desenhar_texto("Feito por", BRANCO, LARGURA//2, ALTURA//2 - 100)
         desenhar_texto("Guilherme Valadares", BRANCO, LARGURA//2, ALTURA//2 - 30, fonte_pequena)
         desenhar_texto("Pedro Henrique Fonseca",    BRANCO, LARGURA//2, ALTURA//2 + 10, fonte_pequena)
-        desenhar_texto("Daniel",    BRANCO, LARGURA//2, ALTURA//2 + 50, fonte_pequena)
-        desenhar_texto("Vinicius",    BRANCO, LARGURA//2, ALTURA//2 + 90, fonte_pequena)
+        desenhar_texto("Daniell Cardoso",    BRANCO, LARGURA//2, ALTURA//2 + 50, fonte_pequena)
+        desenhar_texto("Vinicius Eduardo",    BRANCO, LARGURA//2, ALTURA//2 + 90, fonte_pequena)
         if pygame.time.get_ticks() - tempo_estado > 2000:
             estado= "MENU"
             tempo_estado = pygame.time.get_ticks()
@@ -159,7 +168,7 @@ while True:
 
     elif estado == "JOGANDO":
         bola = mover_bola(bola, vel_bola_x, vel_bola_y)
-        vel_bola_x, vel_bola_y = verificar_paredes(bola, vel_bola_x, vel_bola_y, LARGURA, ALTURA)
+        vel_bola_x, vel_bola_y = verificar_paredes(bola, vel_bola_x, vel_bola_y, mesa)
         vel_bola_x = verificar_colisao_raquete(bola, vel_bola_x, raquete_esq, raquete_dir)
 
         if bola.left <= 0:
@@ -181,20 +190,21 @@ while True:
         if teclas[K_DOWN]:
             mover_raquete(raquete_dir, 1, VELOCIDADE_RAQUETE, ALTURA)
 
-        tela.fill(PRETO)
-        pygame.draw.rect(tela, BRANCO, raquete_esq)
-        pygame.draw.rect(tela, BRANCO, raquete_dir)
-        pygame.draw.ellipse(tela, BRANCO, bola)
+        tela.blit(fundo, (0, 0))
+
+        pygame.draw.rect(tela, VERMELHO, raquete_esq)
+        pygame.draw.rect(tela, AZUL, raquete_dir)
+        pygame.draw.ellipse(tela, CINZA_CLARO, bola)
         desenhar_texto(f"P1: {vidas_esq}", BRANCO, LARGURA//4, 30, fonte_pequena)
         desenhar_texto(f"P2: {vidas_dir}", BRANCO, LARGURA * 3//4, 30, fonte_pequena)
         if vidas_esq <= 0 or vidas_dir <= 0:
             estado = "GAME_OVER"
 
     elif estado == "PAUSE":
-        tela.fill(PRETO)
-        pygame.draw.rect(tela, BRANCO, raquete_esq)
-        pygame.draw.rect(tela, BRANCO, raquete_dir)
-        pygame.draw.ellipse(tela, BRANCO, bola)
+        tela.blit(fundo, (0, 0))
+        pygame.draw.rect(tela, VERMELHO, raquete_esq)
+        pygame.draw.rect(tela, AZUL, raquete_dir)
+        pygame.draw.ellipse(tela, CINZA_CLARO, bola)
 
         escurecer = pygame.Surface((LARGURA, ALTURA))
         escurecer.set_alpha(150)

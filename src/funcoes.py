@@ -5,11 +5,13 @@ def mover_bola(bola, vel_x, vel_y):
     bola.y += vel_y
     return bola
 
-def verificar_paredes(bola, vel_x, vel_y, largura, altura):
-    if bola.top <= 0 or bola.bottom >= altura:
+def verificar_paredes(bola, vel_x, vel_y, mesa):
+    if bola.top <= mesa.top:
+        bola.top = mesa.top
         vel_y *= -1
-    if bola.left <= 0 or bola.right >= largura:
-        vel_x *= -1
+    if bola.bottom >= mesa.bottom:
+        bola.bottom = mesa.bottom
+        vel_y *= -1
     return vel_x, vel_y
 
 def verificar_colisao_raquete(bola, vel_x, raquete_esq, raquete_dir):
