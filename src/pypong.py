@@ -12,7 +12,7 @@ VERDE = (0,255,0)
 pygame.init()
 
 PASTA_ATUAL = os.path.dirname(os.path.abspath(__file__))
-CAMINHO_FONTE = os.path.join(PASTA_ATUAL, "..", "assets", "fontes", "DeterminationSansWebRegular-369X.ttf")
+CAMINHO_FONTE = os.path.join(PASTA_ATUAL, "..", "assets", "fontes", "determination.ttf")
 
 fonte = pygame.font.Font(CAMINHO_FONTE, 50)
 fonte_pequena = pygame.font.Font(CAMINHO_FONTE, 28)
@@ -111,6 +111,14 @@ while True:
                         estado= "JOGANDO"
                     elif opcao_pause == 1:
                         estado = "MENU"
+            
+            elif estado == "GAME_OVER":
+                if event.key == K_RETURN:
+                    vidas_esq = 3
+                    vidas_dir = 3
+                    bola.x = LARGURA//2 - 8
+                    bola.y = ALTURA//2 - 8
+                    estado = "MENU"
 
     if estado == "INTRO_NOME":
         tela.fill(PRETO)
@@ -177,7 +185,10 @@ while True:
         pygame.draw.rect(tela, BRANCO, raquete_esq)
         pygame.draw.rect(tela, BRANCO, raquete_dir)
         pygame.draw.ellipse(tela, BRANCO, bola)
-        pygame.display.set_caption(f"P1: {vidas_esq} vidas | P2: {vidas_dir} vidas")
+        desenhar_texto(f"P1: {vidas_esq}", BRANCO, LARGURA//4, 30, fonte_pequena)
+        desenhar_texto(f"P2: {vidas_dir}", BRANCO, LARGURA * 3//4, 30, fonte_pequena)
+        if vidas_esq <= 0 or vidas_dir <= 0:
+            estado = "GAME_OVER"
 
     elif estado == "PAUSE":
         tela.fill(PRETO)
@@ -203,6 +214,12 @@ while True:
         else:
             desenhar_texto("Voltar ao Menu", BRANCO, LARGURA//2, ALTURA//2 + 60, fonte_pequena)
 
+    
     elif estado == "GAME_OVER":
-        pass
+        tela.fill(PRETO)
+        if vidas_esq <= 0:
+            desenhar_texto("P2 VENCEU!", BRANCO, LARGURA//2, ALTURA//2 - 50)
+        else:
+            desenhar_texto("P1 VENCEU!", BRANCO, LARGURA//2, ALTURA//2 - 50)
+        desenhar_texto("ENTER para jogar de novo", BRANCO, LARGURA//2, ALTURA//2 + 30, fonte_pequena)
     pygame.display.update()
