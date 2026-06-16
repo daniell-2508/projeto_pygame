@@ -15,13 +15,15 @@ def verificar_paredes(bola, vel_x, vel_y, mesa):
     return vel_x, vel_y
 
 def verificar_colisao_raquete(bola, vel_x, raquete_esq, raquete_dir):
-    if bola.colliderect(raquete_esq) or bola.colliderect(raquete_dir):
-        vel_x *= -1
-    return vel_x
+    if bola.colliderect(raquete_esq) and vel_x < 0:
+        return vel_x * -1, True
+    if bola.colliderect(raquete_dir) and vel_x > 0:
+        return vel_x * -1, True
+    return vel_x, False
 
-def mover_raquete(raquete, direcao, velocidade, altura):
+def mover_raquete(raquete, direcao, velocidade, mesa):
     raquete.y += direcao * velocidade
-    if raquete.top < 0:
-        raquete.top = 0
-    if raquete.bottom > altura:
-        raquete.bottom = altura
+    if raquete.top < mesa.top:
+        raquete.top = mesa.top
+    if raquete.bottom > mesa.bottom:
+        raquete.bottom = mesa.bottom

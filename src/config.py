@@ -13,8 +13,8 @@ AZUL = (0,0,255)
 VERDE = (0,255,0)
 
 
-VELOCIDADE_RAQUETE = 5
-VELOCIDADE_BOLA = 3
+VELOCIDADE_RAQUETE = 6
+VELOCIDADE_BOLA = 1
 
 CAMINHO_RECORDE = "data/recorde.txt"
 CAMINHO_SPRITES = "assets/imagens/spritesheet.bmp"
