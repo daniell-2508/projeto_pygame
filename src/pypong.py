@@ -44,8 +44,8 @@ vel_bola_y = VELOCIDADE_BOLA
 relogio = pygame.time.Clock()
 opcao_pause = 0
 
-vidas_esq = 3
-vidas_dir = 3
+vidas_esq = 5
+vidas_dir = 5
 pontos=0
 
 
@@ -57,9 +57,9 @@ def desenhar_texto(texto, cor, x, y, fonte_usada=None):
     tela.blit(superficie, retangulo)
 
 dificuldades= {
-    "FACIL": 4,
-    "MEDIO": 6,
-    "DIFICIL": 9,
+    "FACIL": 3,
+    "MEDIO": 4,
+    "DIFICIL": 6,
     }
 
 estado = "INTRO_NOME"
@@ -83,6 +83,11 @@ while True:
                         opcao_menu =1
                 elif event.key == K_RETURN:
                     if opcao_menu == 0:
+                        pontos = 0
+                        vidas_esq = 5
+                        vidas_dir = 5
+                        bola.x = mesa.centerx - 8
+                        bola.y = mesa.centery - 8
                         estado = "DIFICULDADE"
                     elif opcao_menu == 1:
                         pygame.quit()
@@ -94,15 +99,16 @@ while True:
                 elif event.key == K_1 or event.key == K_KP1:
                     vel_bola_x = dificuldades["FACIL"]
                     vel_bola_y = dificuldades["FACIL"]
-                    estado = "JOGANDO"
+
                 elif event.key == K_2 or event.key == K_KP2:
                     vel_bola_x = dificuldades["MEDIO"]
                     vel_bola_y = dificuldades["MEDIO"]
-                    estado = "JOGANDO"
+
                 elif event.key == K_3 or event.key == K_KP3:
                     vel_bola_x = dificuldades["DIFICIL"]
                     vel_bola_y = dificuldades["DIFICIL"]
-                    estado = "JOGANDO"
+                estado = "JOGANDO"
+
                 
             elif estado == "JOGANDO":
                 if event.key == K_ESCAPE:
@@ -207,6 +213,9 @@ while True:
         pygame.draw.rect(tela, VERMELHO, raquete_esq)
         pygame.draw.rect(tela, AZUL, raquete_dir)
         pygame.draw.ellipse(tela, CINZA_CLARO, bola)
+        desenhar_texto(f"P1: {vidas_esq}", BRANCO, 90, ALTURA - 30, fonte_pequena)
+        desenhar_texto(f"P2: {vidas_dir}", BRANCO, LARGURA - 90, ALTURA - 30, fonte_pequena)
+        desenhar_texto(str(pontos), BRANCO, LARGURA//2, ALTURA - 30, fonte_pequena)
         if vidas_esq <= 0 or vidas_dir <= 0:
             estado = "GAME_OVER"
 
