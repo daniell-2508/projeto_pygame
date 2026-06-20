@@ -4,6 +4,7 @@ from sys import exit
 from config import LARGURA_TELA as LARGURA, ALTURA_TELA as ALTURA, FPS, TITULO_JOGO as TITULO, PRETO, BRANCO, VELOCIDADE_RAQUETE, VELOCIDADE_BOLA
 from funcoes import mover_bola, verificar_paredes, verificar_colisao_raquete, mover_raquete
 import os
+from dados import carregar_ranking, salvar_ranking
 AMARELO = (255, 255, 0)
 AZUL = (0,0,255)
 VERDE = (0,255,0)
@@ -46,7 +47,11 @@ opcao_pause = 0
 
 vidas_esq = 5
 vidas_dir = 5
-pontos=0
+pontos_p1 = 0
+pontos_p2 = 0
+nome_p1 = ""
+nome_p2 = ""
+digitando = "P1"
 
 
 def desenhar_texto(texto, cor, x, y, fonte_usada=None):
@@ -72,24 +77,46 @@ while True:
             pygame.quit()
             exit()
         if event.type == KEYDOWN:
+            if estado == "INTRO_NOME":
+                if event.key == K_RETURN:
+                    if digitando == "P1" and nome_p1 != "":
+                        digitando = "P2"
+                    elif digitando == "P2" and nome_p2 != "":
+                        estado = "INTRO_CRIADORES"
+                        tempo_estado = pygame.time.get_ticks()
+                elif event.key == K_BACKSPACE:
+                    if digitando == "P1":
+                        nome_p1 = nome_p1[:-1]
+                    else:
+                        nome_p2 = nome_p2[:-1]
+                else:
+                    letra = event.unicode
+                    if letra.isprintable():
+                        if digitando == "P1" and len(nome_p1) < 12:
+                            nome_p1 += letra
+                        elif digitando == "P2" and len(nome_p2) < 12:
+                            nome_p2 += letra
             if estado == "MENU":
                 if event.key == K_DOWN:
                     opcao_menu+=1
-                    if opcao_menu > 1:
+                    if opcao_menu > 2:
                         opcao_menu =0
                 elif event.key == K_UP:
                     opcao_menu -=1
                     if opcao_menu < 0:
-                        opcao_menu =1
+                        opcao_menu = 2
                 elif event.key == K_RETURN:
                     if opcao_menu == 0:
-                        pontos = 0
+                        pontos_p1 = 0
+                        pontos_p2 = 0
                         vidas_esq = 5
                         vidas_dir = 5
                         bola.x = mesa.centerx - 8
                         bola.y = mesa.centery - 8
                         estado = "DIFICULDADE"
                     elif opcao_menu == 1:
+                        estado = "RANKING"
+                    elif opcao_menu == 2:
                         pygame.quit()
                         exit()
 
@@ -134,18 +161,27 @@ while True:
             
             elif estado == "GAME_OVER":
                 if event.key == K_RETURN:
-                    vidas_esq = 3
-                    vidas_dir = 3
-                    bola.x = LARGURA//2 - 8
-                    bola.y = ALTURA//2 - 8
+                    vidas_esq = 5
+                    vidas_dir = 5
+                    bola.x = mesa.centerx - 8
+                    bola.y = mesa.centery - 8
                     estado = "MENU"
 
+            elif estado == "RANKING":
+                if event.key == K_ESCAPE:
+                    estado = "MENU"
+
+
     if estado == "INTRO_NOME":
-        tela.fill(PRETO)
-        desenhar_texto("PYPONG", BRANCO, LARGURA//2, ALTURA//2)
-        if pygame.time.get_ticks() - tempo_estado > 2000:
-            estado= "INTRO_CRIADORES"
-            tempo_estado = pygame.time.get_ticks()
+        tela.fill(AZUL_MARINHO)
+        if digitando == "P1":
+            desenhar_texto("Digite o nome do P1:", BRANCO, LARGURA//2, ALTURA//2 - 60)
+            desenhar_texto(nome_p1 + "|", AMARELO, LARGURA//2, ALTURA//2 + 10)
+        else:
+            desenhar_texto("Digite o nome do P2:", BRANCO, LARGURA//2, ALTURA//2 - 60)
+            desenhar_texto(nome_p2 + "|", AMARELO, LARGURA//2, ALTURA//2 + 10)
+        desenhar_texto("ENTER para confirmar", BRANCO, LARGURA//2, ALTURA//2 + 100, fonte_pequena)
+        
 
     elif estado == "INTRO_CRIADORES":
         tela.fill(PRETO)
@@ -160,20 +196,22 @@ while True:
 
     elif estado == "MENU":
         tela.fill(AZUL_MARINHO)
+        capa_x = LARGURA - capa_img.get_width()
+        capa_y = ALTURA - capa_img.get_height()
+        tela.blit(capa_img, (capa_x, capa_y))
         desenhar_texto("PYPONG", BRANCO, LARGURA//2, 90)
         if opcao_menu == 0:
             desenhar_texto("JOGAR", AMARELO, LARGURA//2, 180, fonte_pequena)
         else:
             desenhar_texto("JOGAR", BRANCO, LARGURA//2, 180, fonte_pequena)
         if opcao_menu == 1:
-            desenhar_texto("SAIR", AMARELO, LARGURA//2, 240, fonte_pequena)
+            desenhar_texto("RANKING", AMARELO, LARGURA//2, 240, fonte_pequena)
         else:
-            desenhar_texto("SAIR", BRANCO, LARGURA//2, 240, fonte_pequena)
-
-
-        capa_x = LARGURA - capa_img.get_width()
-        capa_y = ALTURA - capa_img.get_height()
-        tela.blit(capa_img, (capa_x, capa_y))
+            desenhar_texto("RANKING", BRANCO, LARGURA//2, 240, fonte_pequena)
+        if opcao_menu == 2:
+            desenhar_texto("SAIR", AMARELO, LARGURA//2, 300, fonte_pequena)
+        else:
+            desenhar_texto("SAIR", BRANCO, LARGURA//2, 300, fonte_pequena)
 
     elif estado == "DIFICULDADE":
         tela.fill(PRETO)
@@ -186,8 +224,10 @@ while True:
         bola = mover_bola(bola, vel_bola_x, vel_bola_y)
         vel_bola_x, vel_bola_y = verificar_paredes(bola, vel_bola_x, vel_bola_y, mesa)
         vel_bola_x, bateu = verificar_colisao_raquete(bola, vel_bola_x, raquete_esq, raquete_dir)
-        if bateu:
-            pontos += 15
+        if bateu == "ESQ":
+            pontos_p1 += 15
+        elif bateu == "DIR":
+            pontos_p2 += 15
 
         if bola.left <= mesa.left:
             vidas_esq -= 1
@@ -215,8 +255,13 @@ while True:
         pygame.draw.ellipse(tela, CINZA_CLARO, bola)
         desenhar_texto(f"P1: {vidas_esq}", BRANCO, 90, ALTURA - 30, fonte_pequena)
         desenhar_texto(f"P2: {vidas_dir}", BRANCO, LARGURA - 90, ALTURA - 30, fonte_pequena)
-        desenhar_texto(str(pontos), BRANCO, LARGURA//2, ALTURA - 30, fonte_pequena)
+        desenhar_texto(str(pontos_p1), BRANCO, 90, ALTURA - 60, fonte_pequena)
+        desenhar_texto(str(pontos_p2), BRANCO, LARGURA - 90, ALTURA - 60, fonte_pequena)
         if vidas_esq <= 0 or vidas_dir <= 0:
+            if vidas_esq <= 0:
+                salvar_ranking(nome_p2, pontos_p2)
+            else:
+                salvar_ranking(nome_p1, pontos_p1)
             estado = "GAME_OVER"
 
     elif estado == "PAUSE":
@@ -247,8 +292,18 @@ while True:
     elif estado == "GAME_OVER":
         tela.fill(PRETO)
         if vidas_esq <= 0:
-            desenhar_texto("P2 VENCEU!", BRANCO, LARGURA//2, ALTURA//2 - 50)
+            desenhar_texto(f"{nome_p2} VENCEU!", AMARELO, LARGURA//2, ALTURA//2 - 50)
         else:
-            desenhar_texto("P1 VENCEU!", BRANCO, LARGURA//2, ALTURA//2 - 50)
-        desenhar_texto("ENTER para jogar de novo", BRANCO, LARGURA//2, ALTURA//2 + 30, fonte_pequena)
+            desenhar_texto(f"{nome_p1} VENCEU!", AMARELO, LARGURA//2, ALTURA//2 - 50)
+        desenhar_texto("ENTER para voltar ao menu", BRANCO,LARGURA//2, ALTURA//2 + 30, fonte_pequena)
+    elif estado == "RANKING":
+        tela.fill(AZUL_MARINHO)
+        desenhar_texto("RANKING", BRANCO, LARGURA//2, 70)
+        ranking = carregar_ranking()
+        if len(ranking) == 0:
+            desenhar_texto("Nenhum recorde ainda!", BRANCO, LARGURA//2, ALTURA//2, fonte_pequena)
+        else:
+            for i, entrada in enumerate(ranking):
+                desenhar_texto(f"{i+1}. {entrada['jogador']} - {entrada['pontos']}", BRANCO, LARGURA//2, 150 + i * 60, fonte_pequena)
+        desenhar_texto("ESC para voltar", BRANCO, LARGURA//2, ALTURA - 40, fonte_pequena)
     pygame.display.update()

@@ -16,10 +16,10 @@ def verificar_paredes(bola, vel_x, vel_y, mesa):
 
 def verificar_colisao_raquete(bola, vel_x, raquete_esq, raquete_dir):
     if bola.colliderect(raquete_esq) and vel_x < 0:
-        return vel_x * -1, True
+        return vel_x * -1, "ESQ"
     if bola.colliderect(raquete_dir) and vel_x > 0:
-        return vel_x * -1, True
-    return vel_x, False
+        return vel_x * -1, "DIR"
+    return vel_x, None
 
 def mover_raquete(raquete, direcao, velocidade, mesa):
     raquete.y += direcao * velocidade
