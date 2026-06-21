@@ -1,8 +1,9 @@
 import pygame 
+pygame.init()
 from pygame.locals import *
 from sys import exit
 from config import LARGURA_TELA as LARGURA, ALTURA_TELA as ALTURA, FPS, TITULO_JOGO as TITULO, PRETO, BRANCO, VELOCIDADE_RAQUETE, VELOCIDADE_BOLA
-from funcoes import mover_bola, verificar_paredes, verificar_colisao_raquete, mover_raquete
+from funcoes import mover_bola, verificar_paredes, verificar_colisao_raquete, mover_raquete, desenhar_texto
 import os
 from dados import carregar_ranking, salvar_ranking
 AMARELO = (255, 255, 0)
@@ -12,8 +13,6 @@ CINZA_CLARO = (190, 190, 190)
 VERMELHO = (255, 0 ,0)
 AZUL_MARINHO = (39, 39, 54)
 
-
-pygame.init()
 
 PASTA_ATUAL = os.path.dirname(os.path.abspath(__file__))
 CAMINHO_FONTE = os.path.join(PASTA_ATUAL, "..", "assets", "fontes", "determination.ttf")
@@ -54,12 +53,6 @@ nome_p2 = ""
 digitando = "P1"
 
 
-def desenhar_texto(texto, cor, x, y, fonte_usada=None):
-    if fonte_usada is None:
-        fonte_usada = fonte
-    superficie = fonte_usada.render(texto, True, cor)
-    retangulo = superficie.get_rect(center=(x, y))
-    tela.blit(superficie, retangulo)
 
 dificuldades= {
     "FACIL": 3,
