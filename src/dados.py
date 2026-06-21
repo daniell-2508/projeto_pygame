@@ -35,6 +35,7 @@ def salvar_ranking(vencedor, pontos):
         if entrada["jogador"] == vencedor:
             if pontos > entrada["pontos"]:
                 entrada["pontos"] = pontos
+            ranking.sort(key=lambda x: x["pontos"], reverse=True)
             with open(CAMINHO_RANKING, "w", encoding="utf-8") as f:
                 json.dump(ranking, f)
             return
