@@ -31,6 +31,11 @@ capa_img = pygame.transform.scale(capa_img, (480, 480))
 fundo = pygame.image.load(CAMINHO_CENARIO).convert()
 fundo = pygame.transform.scale(fundo, (LARGURA, ALTURA))
 
+# Carrega a musica de fundo (toca apenas durante a partida)
+CAMINHO_MUSICA = os.path.join(PASTA_ATUAL, "..", "assets", "sons", "musica_fundo.ogg")
+pygame.mixer.music.load(CAMINHO_MUSICA)
+pygame.mixer.music.set_volume(0.5)
+
 
 tempo_estado = pygame.time.get_ticks()
 # Retângulo que representa a área jogável da mesa
@@ -135,16 +140,19 @@ while True:
                     vel_bola_x = dificuldades["DIFICIL"]
                     vel_bola_y = dificuldades["DIFICIL"]
                 estado = "JOGANDO"
+                pygame.mixer.music.play(-1)
 
                 
             elif estado == "JOGANDO":
                 if event.key == K_ESCAPE:
                     estado = "PAUSE"
                     opcao_pause = 0
+                    pygame.mixer.music.pause()
 
             elif estado == "PAUSE":
                 if event.key == K_ESCAPE:
                     estado = "JOGANDO"
+                    pygame.mixer.music.unpause()
                 elif event.key == K_DOWN:
                     opcao_pause +=1
                     if opcao_pause >1:
@@ -156,8 +164,10 @@ while True:
                 elif event.key == K_RETURN:
                     if opcao_pause == 0:
                         estado= "JOGANDO"
+                        pygame.mixer.music.unpause()
                     elif opcao_pause == 1:
                         estado = "MENU"
+                        pygame.mixer.music.stop()
             
             elif estado == "GAME_OVER":
                 if event.key == K_RETURN:
@@ -261,6 +271,7 @@ while True:
         desenhar_texto(str(pontos_p2), BRANCO, LARGURA - 90, ALTURA - 60, fonte_pequena)
         # Quando alguém fica sem vidas, salva a pontuação do vencedor e vai pra tela de game over
         if vidas_esq <= 0 or vidas_dir <= 0:
+            pygame.mixer.music.stop()
             if vidas_esq <= 0:
                 salvar_ranking(nome_p2, pontos_p2)
             else:
