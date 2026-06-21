@@ -18,6 +18,7 @@ def carregar_recorde(caminho_arquivo):
                 return 0
             return int(conteudo)
     except FileNotFoundError:
+        # Se o arquivo ainda não existe (primeira vez que o jogo roda), retorna 0
         return 0
 
 
@@ -30,7 +31,7 @@ def carregar_ranking():
 
 def salvar_ranking(vencedor, pontos):
     ranking = carregar_ranking()
-    
+    # Se o jogador já está no ranking, atualiza a pontuação só se for maior que a anterior
     for entrada in ranking:
         if entrada["jogador"] == vencedor:
             if pontos > entrada["pontos"]:
@@ -39,7 +40,7 @@ def salvar_ranking(vencedor, pontos):
             with open(CAMINHO_RANKING, "w", encoding="utf-8") as f:
                 json.dump(ranking, f)
             return
-    
+    # Se é um jogador novo, adiciona, ordena e mantém só os 5 melhores
     ranking.append({"jogador": vencedor, "pontos": pontos})
     ranking.sort(key=lambda x: x["pontos"], reverse=True)
     ranking = ranking[:5]

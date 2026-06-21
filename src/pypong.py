@@ -33,11 +33,13 @@ fundo = pygame.transform.scale(fundo, (LARGURA, ALTURA))
 
 
 tempo_estado = pygame.time.get_ticks()
-
+# Retângulo que representa a área jogável da mesa
 mesa = pygame.Rect(208, 256, 352, 200)
 
+# Cada raquete começa centralizada verticalmente na borda da mesa
 raquete_esq = pygame.Rect(mesa.left, mesa.centery - 40, 8, 50)
 raquete_dir = pygame.Rect(mesa.right - 10, mesa.centery - 40, 8, 50)
+
 bola = pygame.Rect(mesa.centerx - 8, mesa.centery - 8, 12, 12)
 vel_bola_x = VELOCIDADE_BOLA
 vel_bola_y = VELOCIDADE_BOLA
@@ -60,6 +62,8 @@ dificuldades= {
     "DIFICIL": 6,
     }
 
+# Variável que controla qual tela está ativa no momento
+# Os estados possíveis são: INTRO_NOME, INTRO_CRIADORES, MENU, DIFICULDADE, JOGANDO, PAUSE, GAME_OVER, RANKING
 estado = "INTRO_NOME"
 opcao_menu= 0
 
@@ -70,6 +74,7 @@ while True:
             pygame.quit()
             exit()
         if event.type == KEYDOWN:
+             # O jogador digita o nome antes de começar — primeiro P1, depois P2
             if estado == "INTRO_NOME":
                 if event.key == K_RETURN:
                     if digitando == "P1" and nome_p1 != "":
@@ -89,6 +94,7 @@ while True:
                             nome_p1 += letra
                         elif digitando == "P2" and len(nome_p2) < 12:
                             nome_p2 += letra
+            # Navegação do menu com as setas do teclado, voltando pro início se passar do último item
             if estado == "MENU":
                 if event.key == K_DOWN:
                     opcao_menu+=1
@@ -100,6 +106,7 @@ while True:
                         opcao_menu = 2
                 elif event.key == K_RETURN:
                     if opcao_menu == 0:
+                        # Reinicia tudo antes de começar uma nova partida
                         pontos_p1 = 0
                         pontos_p2 = 0
                         vidas_esq = 5
@@ -164,7 +171,7 @@ while True:
                 if event.key == K_ESCAPE:
                     estado = "MENU"
 
-
+    # Desenhos
     if estado == "INTRO_NOME":
         tela.fill(AZUL_MARINHO)
         if digitando == "P1":
@@ -217,15 +224,17 @@ while True:
         bola = mover_bola(bola, vel_bola_x, vel_bola_y)
         vel_bola_x, vel_bola_y = verificar_paredes(bola, vel_bola_x, vel_bola_y, mesa)
         vel_bola_x, bateu = verificar_colisao_raquete(bola, vel_bola_x, raquete_esq, raquete_dir)
+        # Cada rebatida na raquete vale 15 pontos pro jogador que bateu
         if bateu == "ESQ":
             pontos_p1 += 15
         elif bateu == "DIR":
             pontos_p2 += 15
-
+        # Se a bola saiu pelo lado esquerdo, P1 perde uma vida e a bola volta pro centro
         if bola.left <= mesa.left:
             vidas_esq -= 1
             bola.x = mesa.centerx - 8
             bola.y = mesa.centery - 8
+        # Mesma coisa pelo lado direito, mas agora é P2 que perde
         if bola.right >= mesa.right:
             vidas_dir -= 1
             bola.x = mesa.centerx - 8
@@ -250,6 +259,7 @@ while True:
         desenhar_texto(f"P2: {vidas_dir}", BRANCO, LARGURA - 90, ALTURA - 30, fonte_pequena)
         desenhar_texto(str(pontos_p1), BRANCO, 90, ALTURA - 60, fonte_pequena)
         desenhar_texto(str(pontos_p2), BRANCO, LARGURA - 90, ALTURA - 60, fonte_pequena)
+        # Quando alguém fica sem vidas, salva a pontuação do vencedor e vai pra tela de game over
         if vidas_esq <= 0 or vidas_dir <= 0:
             if vidas_esq <= 0:
                 salvar_ranking(nome_p2, pontos_p2)
@@ -296,6 +306,7 @@ while True:
         if len(ranking) == 0:
             desenhar_texto("Nenhum recorde ainda!", BRANCO, LARGURA//2, ALTURA//2, fonte_pequena)
         else:
+             # Percorre a lista e exibe cada entrada com posição, nome e pontuação
             for i, entrada in enumerate(ranking):
                 desenhar_texto(f"{i+1}. {entrada['jogador']} - {entrada['pontos']}", BRANCO, LARGURA//2, 150 + i * 60, fonte_pequena)
         desenhar_texto("ESC para voltar", BRANCO, LARGURA//2, ALTURA - 40, fonte_pequena)
