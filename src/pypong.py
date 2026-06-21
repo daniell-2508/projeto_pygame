@@ -41,6 +41,11 @@ CAMINHO_SOM_REBATIDA = os.path.join(PASTA_ATUAL, "..", "assets", "sons", "som_re
 som_rebatida = pygame.mixer.Sound(CAMINHO_SOM_REBATIDA)
 som_rebatida.set_volume(0.7)
 
+# Som de clique/navegação nos menus
+CAMINHO_SOM_MENU = os.path.join(PASTA_ATUAL, "..", "assets", "sons", "som_menu.wav")
+som_menu = pygame.mixer.Sound(CAMINHO_SOM_MENU)
+som_menu.set_volume(0.6)
+
 
 tempo_estado = pygame.time.get_ticks()
 # Retângulo que representa a área jogável da mesa
@@ -110,11 +115,14 @@ while True:
                     opcao_menu+=1
                     if opcao_menu > 2:
                         opcao_menu =0
+                    som_menu.play()
                 elif event.key == K_UP:
                     opcao_menu -=1
                     if opcao_menu < 0:
                         opcao_menu = 2
+                    som_menu.play()
                 elif event.key == K_RETURN:
+                    som_menu.play()
                     if opcao_menu == 0:
                         # Reinicia tudo antes de começar uma nova partida
                         pontos_p1 = 0
@@ -136,14 +144,17 @@ while True:
                 elif event.key == K_1 or event.key == K_KP1:
                     vel_bola_x = dificuldades["FACIL"]
                     vel_bola_y = dificuldades["FACIL"]
+                    som_menu.play()
 
                 elif event.key == K_2 or event.key == K_KP2:
                     vel_bola_x = dificuldades["MEDIO"]
                     vel_bola_y = dificuldades["MEDIO"]
+                    som_menu.play()
 
                 elif event.key == K_3 or event.key == K_KP3:
                     vel_bola_x = dificuldades["DIFICIL"]
                     vel_bola_y = dificuldades["DIFICIL"]
+                    som_menu.play()
                 estado = "JOGANDO"
                 pygame.mixer.music.play(-1)
 
@@ -162,11 +173,14 @@ while True:
                     opcao_pause +=1
                     if opcao_pause >1:
                         opcao_pause =0
+                    som_menu.play()
                 elif event.key == K_UP:
                     opcao_pause -=1
                     if opcao_pause < 0:
                         opcao_pause =1
+                    som_menu.play()
                 elif event.key == K_RETURN:
+                    som_menu.play()
                     if opcao_pause == 0:
                         estado= "JOGANDO"
                         pygame.mixer.music.unpause()
