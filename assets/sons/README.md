@@ -11,3 +11,5 @@ Pasta para efeitos sonoros e trilhas do jogo.
 ## Créditos
 
 - **musica_fundo.ogg**: "8-bit Video Game Music" por Arthur Hale, via Pixabay (pixabay.com/music)
+
+- **som_rebatida.wav**: "Metal Hit Sound Effect" via Pixabay (pixabay.com/sound-effects)

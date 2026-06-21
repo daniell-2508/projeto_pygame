@@ -36,6 +36,11 @@ CAMINHO_MUSICA = os.path.join(PASTA_ATUAL, "..", "assets", "sons", "musica_fundo
 pygame.mixer.music.load(CAMINHO_MUSICA)
 pygame.mixer.music.set_volume(0.5)
 
+# Som de rebatida na raquete
+CAMINHO_SOM_REBATIDA = os.path.join(PASTA_ATUAL, "..", "assets", "sons", "som_rebatida.wav")
+som_rebatida = pygame.mixer.Sound(CAMINHO_SOM_REBATIDA)
+som_rebatida.set_volume(0.7)
+
 
 tempo_estado = pygame.time.get_ticks()
 # Retângulo que representa a área jogável da mesa
@@ -237,8 +242,10 @@ while True:
         # Cada rebatida na raquete vale 15 pontos pro jogador que bateu
         if bateu == "ESQ":
             pontos_p1 += 15
+            som_rebatida.play()
         elif bateu == "DIR":
             pontos_p2 += 15
+            som_rebatida.play()
         # Se a bola saiu pelo lado esquerdo, P1 perde uma vida e a bola volta pro centro
         if bola.left <= mesa.left:
             vidas_esq -= 1
